@@ -1,0 +1,38 @@
+{
+  "name": "expressex",
+  "version": "1.0.0",
+  "description": "Exercising Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GithubJoshuaPark/ExpressEx.git"
+  },
+  "keywords": [
+    "expressex"
+  ],
+  "author": "Joshua Park",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GithubJoshuaPark/ExpressEx/issues"
+  },
+  "homepage": "https://github.com/GithubJoshuaPark/ExpressEx#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "style-components": "^0.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "json-server": "^0.17.0",
+    "nodemon": "^2.0.16"
+  }
+}

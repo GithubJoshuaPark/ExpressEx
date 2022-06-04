@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+}
+
+.new-page-body {
+  background-image: url('../images/fimge001.jpg'); 
+  background-size: 100%; 
+  background-repeat: no-repeat;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+}
+
+.page-body-404 {
+  background-image: url('../images/404.jpg'); 
+  background-size: 100%; 
+  background-repeat: no-repeat;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+}
+
+.head-title-h4 {
+  margin: 10px 30px;
+}
