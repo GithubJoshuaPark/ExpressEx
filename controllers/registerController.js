@@ -1,16 +1,11 @@
-const usersDB = {
-  users: require('../model/users.json'),
-  setUsers: function(data) { this.users = data}
-}
-
 const fsPromises = require('fs').promises
 const path       = require('path')
 const bcrypt     = require('bcrypt')
-const { __DEBUG__ } = require('../const/constrefs')
+const { __DEBUG__, USERS_DB } = require('../const/constrefs')
+const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
 
 if (__DEBUG__) {
-  const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
-  console.log(`[${baseFileName} > data users]: `, usersDB.users);
+  console.log(`[${baseFileName} > data users]: `, USERS_DB.users);
 }
 
 // MARK: - REST Handlers
@@ -21,9 +16,14 @@ const handleNewUser = async(req, res) => {
   })
 
   // Check for duplicate usename in the db
-  const idDuplicate = usersDB.users.find(person => person.username === user)
+  const idDuplicate = USERS_DB.users.find(person => person.username === user)
   
-  if(idDuplicate) return res.sendStatus(409) // Conflict
+  if(idDuplicate) {
+    //return res.sendStatus(409) // Conflict
+    return res.status(409).json({
+      "message": `Already the ID exists`
+    })
+  } 
   
   try {
     // Encrypt pwd
@@ -33,16 +33,16 @@ const handleNewUser = async(req, res) => {
     const newUser = {"username": user, "password": hashedPwd}
 
     // Add new user into the userDB(Memory)
-    usersDB.setUsers([...usersDB.users, newUser])
+    USERS_DB.setUsers([...USERS_DB.users, newUser])
 
     // Add new User data into the file(DB)
     await fsPromises.writeFile(
       path.join(__dirname, '..', 'model', 'users.json'),
-      JSON.stringify(usersDB.users)
+      JSON.stringify(USERS_DB.users)
     )
 
     if(__DEBUG__) {
-      console.log(`[registerController]: `, usersDB.users)
+      console.log(`[${baseFileName} > All registered users]: `, USERS_DB.users);
     }
 
     res.status(201).json({'success': `New user ${user} created`})

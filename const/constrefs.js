@@ -6,4 +6,16 @@ const WHITELIST_FOR_CORS = [
   'http://localhost:3500',
 ];
 
-module.exports = { __DEBUG__, WHITELIST_FOR_CORS }
+const USERS_DB = {
+  users: require("../model/users.json"),
+  setUsers: function (data) {
+    this.users = data;
+  },
+};
+
+const EMPLOYEES_DB = {
+  employees: require("../model/employees.json"),
+  setEmployees: function(data) { this.employees = data}
+};
+
+module.exports = { __DEBUG__, WHITELIST_FOR_CORS, USERS_DB, EMPLOYEES_DB }

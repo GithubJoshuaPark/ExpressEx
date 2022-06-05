@@ -1,16 +1,10 @@
-const usersDB = {
-  users: require("../model/users.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
-
 const fsPromises    = require("fs").promises;
 const path          = require("path");
 const bcrypt        = require("bcrypt");
-const { __DEBUG__ } = require("../const/constrefs");
+const { __DEBUG__, USERS_DB } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
 require("dotenv").config();
+const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
 /**
  * Checking req.body.user, pwd and make JWT and send it
@@ -21,10 +15,7 @@ require("dotenv").config();
 const handleLogin = async (req, res) => {
   const { user, pwd } = req.body;
 
-  console.log(`[authController > handleLogin]`, req.body)
-
-  if (__DEBUG__) {
-    const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
+  if (__DEBUG__) {    
     console.log(`[${baseFileName} > req body]: `, req.body);
   }
 
@@ -34,7 +25,7 @@ const handleLogin = async (req, res) => {
     });
   }
 
-  const foundedUser = usersDB.users.find((person) => person.username === user);
+  const foundedUser = USERS_DB.users.find((person) => person.username === user);
   if (!foundedUser) {
     //return res.sendStatus(401) // Unauthorized
     return res
@@ -60,21 +51,22 @@ const handleLogin = async (req, res) => {
 
     // Saving refreshToken with current user to invalidate 
     // the refreshToken when the current user log out before the e
-    const otherUsers = usersDB.users.filter(person => person.username !== foundedUser.username);
+    const otherUsers = USERS_DB.users.filter(person => person.username !== foundedUser.username);
     const currentUser = {...foundedUser, refreshToken}
     
-    usersDB.setUsers([...otherUsers, currentUser])
+    USERS_DB.setUsers([...otherUsers, currentUser])
 
     await fsPromises.writeFile(
       path.join(__dirname, '..', 'model', 'users.json'),
-      JSON.stringify(usersDB.users)
+      JSON.stringify(USERS_DB.users)
     )
 
     // MARK: - Send accessToken and refreshToken to the current user
-    // send the refreshToken for 1day using cookie to the front-end side
+    // Send the refreshToken for 1 day contained into the cookie object to the front-end side
+    // ,but this cookie only readable with http protocol, not accessable by the javascript.
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000}) ;
 
-    // send accessToken to the frond-end side 
+    // Send the accessToken to the frond-end side 
     // and it should be handled just in the memory for security issue
     res.json({ accessToken });  
 

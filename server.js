@@ -34,9 +34,10 @@ app.use('/subdir', express.static(path.join(__dirname, "/public")));
 // MARK: - 🍎 Router Handlers
 app.use('/'         , require('./routes/root'))
 app.use('/subdir'   , require('./routes/subdir'))
-app.use('/register' , require('./routes/api/register'))    // rest api user register      (post)
-app.use('/auth'     , require('./routes/api/auth'))        // rest api user authrization  (post)
-app.use('/refresh'  , require('./routes/api/refresh'))     // rest api get  reissued access token  (get)
+app.use('/register' , require('./routes/api/register'))    // Register a new user (post)
+app.use('/auth'     , require('./routes/api/auth'))        // Issue accessToken, refreshToken (post)
+app.use('/refresh'  , require('./routes/api/refresh'))     // Reissued access token  (get)
+app.use('/logout'   , require('./routes/api/logout'))      // Clear cookie has refreshToken  (get)
 
 app.use(verifyJWT)                                         // verifyJWT applied only the below router, /employees
 app.use('/employees', require('./routes/api/employees'))   // rest api json-data delivery which not use html
