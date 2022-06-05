@@ -10,9 +10,9 @@ const verifyRoles = (...allowedRoles) => {
     const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
 
     if(__DEBUG__) {
-      console.log(`[${baseFileName} > rolesArray]: `, rolesArray);
-      console.log(`[${baseFileName} > req.roles]: ` , req.roles );  // comming from jwt
-      console.log(`[${baseFileName} > result]: `    , result    );
+      console.log(`[${baseFileName} > rolesArray(required role)]: `, rolesArray);
+      console.log(`[${baseFileName} > req.roles(user's role)]: `   , req.roles );  // comming from jwt
+      console.log(`[${baseFileName} > result]: `                   , result    );
     }
 
     if(!result) return res.sendStatus(401); // UnAuthorized

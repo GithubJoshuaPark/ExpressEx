@@ -76,7 +76,7 @@ const handleLogin = async (req, res) => {
                 {
                   httpOnly: true,
                   sameSite: 'None',
-                  // secure: true,
+                  // secure: true,  // commented to use refresh token
                   maxAge: 24 * 60 * 60 * 1000
                 }
               ) ;
