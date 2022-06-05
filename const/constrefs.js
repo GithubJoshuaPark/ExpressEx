@@ -18,4 +18,10 @@ const EMPLOYEES_DB = {
   setEmployees: function(data) { this.employees = data}
 };
 
-module.exports = { __DEBUG__, ALLOWED_ORIGINS_AS_WHITE_LISTS, USERS_DB, EMPLOYEES_DB }
+const ROLES_LIST = {
+  "Admin" : 5150,
+  "Editor": 1984,
+  "User"  : 2001
+}
+
+module.exports = { __DEBUG__, ALLOWED_ORIGINS_AS_WHITE_LISTS, USERS_DB, EMPLOYEES_DB, ROLES_LIST }

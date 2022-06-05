@@ -32,7 +32,12 @@ const handleLogout = async (req, res) => {
   const foundedUser = USERS_DB.users.find((person) => person.refreshToken === refreshToken);
   if (!foundedUser) {
     //return res.sendStatus(403) // Forbidden
-    res.clearCookie('jwt', { httpOnly: true });
+    res.clearCookie('jwt', 
+                    { 
+                      httpOnly: true,
+                      sameSite: 'None',
+                      secure: true
+                    });
     return res.sendStatus(204)
   }
 
@@ -42,7 +47,12 @@ const handleLogout = async (req, res) => {
   USERS_DB.setUsers([...otherUsers, currentUser]);
   await fsPromises.writeFile(path.join(__dirname, '..', 'model', 'users.json'), JSON.stringify(USERS_DB.users));
 
-  res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // secure: true - only serves on https
+  res.clearCookie('jwt', 
+                  { 
+                    httpOnly: true,
+                    sameSite: 'None',
+                    secure: true
+                  }); // secure: true - only serves on https
   res.sendStatus(204);
 
 };

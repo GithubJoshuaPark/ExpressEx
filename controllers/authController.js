@@ -37,14 +37,21 @@ const handleLogin = async (req, res) => {
   const match = await bcrypt.compare(pwd, foundedUser.password);
   if (match) {
     // TODO: 🍎 create JWTs (normal token, refresh token)
+    const roles = Object.values(foundedUser.roles);
+
     const accessToken = jwt.sign(
-      { username: foundedUser.username },
+      { 
+        "UserInfo": {
+          "username": foundedUser.username,
+          "roles": roles
+        } 
+      },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30s" }
+      { expiresIn: "60s" }
     );
 
     const refreshToken = jwt.sign(
-      { username: foundedUser.username },
+      { "username": foundedUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
@@ -64,7 +71,15 @@ const handleLogin = async (req, res) => {
     // MARK: - Send accessToken and refreshToken to the current user
     // Send the refreshToken for 1 day contained into the cookie object to the front-end side
     // ,but this cookie only readable with http protocol, not accessable by the javascript.
-    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000}) ;
+    res.cookie('jwt', 
+                refreshToken, 
+                {
+                  httpOnly: true,
+                  sameSite: 'None',
+                  // secure: true,
+                  maxAge: 24 * 60 * 60 * 1000
+                }
+              ) ;
 
     // Send the accessToken to the frond-end side 
     // and it should be handled just in the memory for security issue

@@ -16,7 +16,7 @@ const getAllEmployees = (req, res) => {
 const postEmployee = (req, res) => {
   // insert
   const newEmployee = {
-    id: data.employees[data.employees.length - 1].id + 1 || 1,
+    id: EMPLOYEES_DB.employees[EMPLOYEES_DB.employees.length - 1].id + 1 || 1,
     firstname: req.body.firstname,
     lastname: req.body.lastname
   }

@@ -42,8 +42,15 @@ const handleRefreshToken = (req, res) => {
       .json({ message: `Delivered RefreshToken: ${refreshToken} is not valid` });
     }
 
+    const roles = Object.values(foundedUser.roles);
+
     const accessToken = jwt.sign(
-      { "username": decoded.username },
+      { 
+        "UserInfo": {
+          "username": foundedUser.username,
+          "roles": roles
+        } 
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '30s'}
     );

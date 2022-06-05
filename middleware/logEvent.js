@@ -5,6 +5,7 @@ const fs         = require('fs')
 const fsPromises = require('fs').promises
 const path       = require('path')
 const __DEBUG__  = require('../const/constrefs')
+const baseFileName = __filename.split("/")[__filename.split("/").length - 1];
 
 /**
  * Write log into the log file, logFileName
@@ -17,7 +18,7 @@ const logEvents = async(message, logFileName) => {
   const logItem  = `${dateTime}\t${uuid()}\t${message}\n`
 
   if(__DEBUG__) {
-    console.log(`[In LogEvent] logItem write in ${logFileName}: `, logItem)
+    console.log(`[${baseFileName} > logItem]: `, logItem);
   }  
 
   try {
@@ -45,7 +46,7 @@ const logger = (req, res, next) => {
   logEvents(`[LogEvent]: ${req.method}\t${req.headers.origin}\t${req.url}`, 'reqLog.txt')
 
   if(__DEBUG__) {
-    console.log(`[LogEvent]: ${req.method}\t${req.path}`)
+    console.log(`[${baseFileName}] > ${req.method}\t${req.path}`);
   }
   
   next()
