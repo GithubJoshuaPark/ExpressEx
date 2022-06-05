@@ -6,12 +6,16 @@ const cors = require("cors");
 const { logger, errorHandler } = require("./middleware/logEvent");
 const corsOptions  = require('./config/corsOptions');
 const verifyJWT    = require('./middleware/verifyJWT');
+const credentials  = require('./middleware/credentials');
 const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 3500;
 
 // MARK: 🍎 Custom Middleware logger
 app.use(logger);
+
+// MARK:  set res.header('Access-Control-Allow-Credentials')
+app.use(credentials);
 
 // MARK: 🍎 cors
 app.use(cors(corsOptions));

@@ -1,6 +1,6 @@
 const __DEBUG__ = process.env.NODE_ENV === 'production' ? false : true;
 
-const WHITELIST_FOR_CORS = [
+const ALLOWED_ORIGINS_AS_WHITE_LISTS = [
   'https://www.yoursite.com',
   'http://127.0.0.1:5500',
   'http://localhost:3500',
@@ -18,4 +18,4 @@ const EMPLOYEES_DB = {
   setEmployees: function(data) { this.employees = data}
 };
 
-module.exports = { __DEBUG__, WHITELIST_FOR_CORS, USERS_DB, EMPLOYEES_DB }
+module.exports = { __DEBUG__, ALLOWED_ORIGINS_AS_WHITE_LISTS, USERS_DB, EMPLOYEES_DB }

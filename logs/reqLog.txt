@@ -183,3 +183,7 @@
 2022-06-05 12:42:22	63105983-3e03-48c1-bb15-4cbe3af7b0a1	[LogEvent]: GET	undefined	/refresh
 2022-06-05 12:42:32	ebee674f-5d90-4e82-aa22-bdc831b96b35	[LogEvent]: GET	undefined	/employees/
 2022-06-05 12:42:39	eaf504f9-d7ef-46ed-a5af-8d2bfb95a77f	[LogEvent]: GET	undefined	/logout
+2022-06-05 16:21:50	838560df-c97d-4524-9160-d510da04c62d	[LogEvent]: POST	undefined	/auth
+2022-06-05 16:22:04	8aaabd4b-66dd-4160-8f38-8a1fb7efd23e	[LogEvent]: GET	undefined	/employees/
+2022-06-05 16:22:08	73e50f7c-43ee-4b8b-bf5e-bdd2150f120c	[LogEvent]: GET	undefined	/refresh
+2022-06-05 16:22:18	4fe3929d-aa6d-448a-9ae0-f6eefabb9f87	[LogEvent]: GET	undefined	/employees/
