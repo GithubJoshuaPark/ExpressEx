@@ -53,3 +53,11 @@ app.use('/',express.static(path.join(__dirname, '/public')))
   $npm i jsonwebtoken 
   $npm i cookie-parser
 ```
+> make .env file at the root level
+> make two token value using node util
+
+```javascript
+// (within termianl)
+  $node
+  > require('crypto').randomBytes(64).toString('hex')
+```

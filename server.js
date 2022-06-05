@@ -4,7 +4,9 @@ const app = express();
 const path = require("path");
 const cors = require("cors");
 const { logger, errorHandler } = require("./middleware/logEvent");
-const corsOptions = require('./config/corsOptions');
+const corsOptions  = require('./config/corsOptions');
+const verifyJWT    = require('./middleware/verifyJWT');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 3500;
 
@@ -22,6 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 // MARK: - 🍎 json (built in middleware)
 app.use(express.json());
 
+// MARK: -- 🍎 for cookies
+app.use(cookieParser());
+
 // MARK: - 🍎 serve static files[css, images, js, text] (built in middleware)
 app.use('/'      , express.static(path.join(__dirname, "/public")));
 app.use('/subdir', express.static(path.join(__dirname, "/public")));
@@ -29,9 +34,12 @@ app.use('/subdir', express.static(path.join(__dirname, "/public")));
 // MARK: - 🍎 Router Handlers
 app.use('/'         , require('./routes/root'))
 app.use('/subdir'   , require('./routes/subdir'))
-app.use('/employees', require('./routes/api/employees'))   // rest api json-data delivery which not use html
 app.use('/register' , require('./routes/api/register'))    // rest api user register      (post)
 app.use('/auth'     , require('./routes/api/auth'))        // rest api user authrization  (post)
+app.use('/refresh'  , require('./routes/api/refresh'))     // rest api get  reissued access token  (get)
+
+app.use(verifyJWT)                                         // verifyJWT applied only the below router, /employees
+app.use('/employees', require('./routes/api/employees'))   // rest api json-data delivery which not use html
 
 // MARK: - 404 page
 app.all("*", (req, res) => {

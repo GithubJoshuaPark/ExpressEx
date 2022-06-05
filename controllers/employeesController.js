@@ -7,7 +7,7 @@ const { __DEBUG__ } = require("../const/constrefs");
 
 if (__DEBUG__) {
   const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
-    console.log(`[${baseFileName} > data employees]: `, data.employees);
+  console.log(`[${baseFileName} > data employees]: `, data.employees);
 }
 
 // MARK: - REST Handlers

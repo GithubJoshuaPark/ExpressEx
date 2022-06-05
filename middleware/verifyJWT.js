@@ -3,7 +3,7 @@ const { __DEBUG__ } = require("../const/constrefs");
 require("dotenv").config();
 
 const verifyJWT = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+  const authHeader = req.headers["authorization"];  // "Bearer fdafda...."
   
   if (__DEBUG__) {
     const baseFileName =
@@ -25,6 +25,7 @@ const verifyJWT = (req, res, next) => {
     req.user = decoded.username;
     next();
   });
+
 };
 
 

@@ -1,16 +1,16 @@
-const fsPromises    = require("fs").promises;
-const path          = require("path");
-const bcrypt        = require("bcrypt");
-const { __DEBUG__ } = require("../const/constrefs");
-const jwt           = require("jsonwebtoken");
-require("dotenv").config();
-
 const usersDB = {
   users: require("../model/users.json"),
   setUsers: function (data) {
     this.users = data;
   },
 };
+
+const fsPromises    = require("fs").promises;
+const path          = require("path");
+const bcrypt        = require("bcrypt");
+const { __DEBUG__ } = require("../const/constrefs");
+const jwt           = require("jsonwebtoken");
+require("dotenv").config();
 
 /**
  * Checking req.body.user, pwd and make JWT and send it
@@ -21,9 +21,10 @@ const usersDB = {
 const handleLogin = async (req, res) => {
   const { user, pwd } = req.body;
 
+  console.log(`[authController > handleLogin]`, req.body)
+
   if (__DEBUG__) {
-    const baseFileName =
-      __filename.split("/")[__filename.split("/").length - 1];
+    const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
     console.log(`[${baseFileName} > req body]: `, req.body);
   }
 
@@ -85,4 +86,4 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleLogin };
+module.exports = { handleLogin }
