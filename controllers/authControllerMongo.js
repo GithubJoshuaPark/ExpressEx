@@ -1,13 +1,10 @@
 /**
- * Using json file as db
+ * Using cloud mongo db as db
  */
-
-const fsPromises    = require("fs").promises;
-const path          = require("path");
+const User          = require('../model/UserForMongoSchema');
 const bcrypt        = require("bcrypt");
-const { __DEBUG__, USERS_DB } = require("../const/constrefs");
+const { __DEBUG__ } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
-// require("dotenv").config(); --> moved into server.js
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
 /**
@@ -29,7 +26,7 @@ const handleLogin = async (req, res) => {
     });
   }
 
-  const foundedUser = USERS_DB.users.find((person) => person.username === user);
+  const foundedUser = await User.findOne({ username: user}).exec(); // 🍎
   if (!foundedUser) {
     //return res.sendStatus(401) // Unauthorized
     return res
@@ -60,17 +57,12 @@ const handleLogin = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    // Saving refreshToken with current user to invalidate 
-    // the refreshToken when the current user log out before the e
-    const otherUsers = USERS_DB.users.filter(person => person.username !== foundedUser.username);
-    const currentUser = {...foundedUser, refreshToken}
-    
-    USERS_DB.setUsers([...otherUsers, currentUser])
-
-    await fsPromises.writeFile(
-      path.join(__dirname, '..', 'model', 'users.json'),
-      JSON.stringify(USERS_DB.users)
-    )
+    // Set the refreshToken of the current user in the Mongo DB
+    foundedUser.refreshToken = refreshToken;
+    const result = await foundedUser.save();
+    if(__DEBUG__) {
+      console.log(`[${baseFileName}]: the currentUser: `, result)
+    }
 
     // MARK: - Send accessToken and refreshToken to the current user
     // Send the refreshToken for 1 day contained into the cookie object to the front-end side
@@ -80,7 +72,7 @@ const handleLogin = async (req, res) => {
                 {
                   httpOnly: true,
                   sameSite: 'None',
-                  // secure: true,  // commented to let this 'jwt' cookie be referred as req.cookie later
+                  // secure: true,  // commented to use refresh token
                   maxAge: 24 * 60 * 60 * 1000
                 }
               ) ;

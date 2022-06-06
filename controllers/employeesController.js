@@ -1,3 +1,7 @@
+/**
+ * Using json file as db
+ */
+
 const { __DEBUG__, EMPLOYEES_DB } = require("../const/constrefs");
 const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
 
@@ -32,13 +36,16 @@ const postEmployee = (req, res) => {
 const putEmployee = (req, res) => {
   // update
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.body.id));
-  console.log(`[putEmployee]:`, employee);
+
+  if(__DEBUG__) {
+    console.log(`[${baseFileName}]: putEmployee `, employee);
+  }
 
   if(!employee) {
-    return res.status(400).json({"message": `Employ ID ${req.body.id} not found`});
+    return res.status(400).json({"message": `Employee of ID (${req.body.id}) not found`});
   }
-  if(req.body.firstname) employee.firstname = req.body.firstname;
-  if(req.body.lastname) employee.lastname = req.body.lastname;
+  if(req.body?.firstname) employee.firstname = req.body.firstname;
+  if(req.body?.lastname) employee.lastname = req.body.lastname;
   const filteredArray = EMPLOYEES_DB.employees.filter(emp => emp.id !== parseInt(req.body.id));
   const unsortedArray = [...filteredArray, employee];
   const sortedArray = unsortedArray.sort((a,b) => a.id > b.id ? 1 : ( a.id < b.id ? -1 : 0));
@@ -62,7 +69,7 @@ const getEmployee = (req, res) => {
   // get the specified id employee data
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.params.id));
   if(!employee) {
-    return res.status(400).json({"message": `Employee ID ${req.params.id} not found`});
+    return res.status(400).json({"message": `Employee of ID (${req.params.id}) not found`});
   }
   res.json(employee);
 };

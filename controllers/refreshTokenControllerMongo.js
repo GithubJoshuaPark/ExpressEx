@@ -1,10 +1,10 @@
 /**
- * Using json file as db
+ * Using cloud mongo db as db
  */
 
-const { __DEBUG__, USERS_DB } = require("../const/constrefs");
+const User          = require('../model/UserForMongoSchema');
+const { __DEBUG__ } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
-// require("dotenv").config(); --> moved into server.js
 
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
@@ -14,10 +14,10 @@ const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
  * @param {*} res
  * @returns
  */
-const handleRefreshToken = (req, res) => {
+const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies
 
-  if (__DEBUG__) {
+  if ( __DEBUG__ ) {
     console.log(`[${baseFileName} > req cookies(current refreshToken)]: `, cookies);
   }
 
@@ -28,8 +28,8 @@ const handleRefreshToken = (req, res) => {
   }
 
   const refreshToken = cookies.jwt;
+  const foundedUser  = await User.findOne({ refreshToken: refreshToken }).exec(); // 🍎
 
-  const foundedUser = USERS_DB.users.find((person) => person.refreshToken === refreshToken);
   if (!foundedUser) {
     //return res.sendStatus(403) // Forbidden
     return res

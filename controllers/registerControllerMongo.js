@@ -1,16 +1,11 @@
 /**
- * Using json file as db
+ * Using cloud mongo db as db
  */
+const User   = require('../model/UserForMongoSchema');
+const bcrypt = require('bcrypt');
 
-const fsPromises = require('fs').promises
-const path       = require('path')
-const bcrypt     = require('bcrypt')
-const { __DEBUG__, USERS_DB } = require('../const/constrefs')
+const { __DEBUG__ } = require('../const/constrefs');
 const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
-
-if (__DEBUG__) {
-  console.log(`[${baseFileName} > data users]: `, USERS_DB.users);
-}
 
 // MARK: - REST Handlers
 const handleNewUser = async(req, res) => {
@@ -20,12 +15,12 @@ const handleNewUser = async(req, res) => {
   })
 
   // Check for duplicate usename in the db
-  const idDuplicate = USERS_DB.users.find(person => person.username === user)
+  const idDuplicate = await User.findOne({ username: user}).exec(); // 🍎
   
   if(idDuplicate) {
     //return res.sendStatus(409) // Conflict
     return res.status(409).json({
-      "message": `Already the ID exists`
+      "message": `Already the user exists`
     })
   } 
   
@@ -33,24 +28,18 @@ const handleNewUser = async(req, res) => {
     // Encrypt pwd
     const hashedPwd = await bcrypt.hash(pwd, 10)  // apply 10 times sort around
     
-    // Store the new user
+    // Store the new user to the cloud mongo db using mongoose shcema model, User
     const newUser = {
+      //"id": automatically generated in the Mogo DB
       "username": user, 
-      "roles": { "User": 2001 },
+      // "roles": default value shall apply with with the User shcema definition
       "password": hashedPwd
-    }
+    };
 
-    // Add new user into the userDB(Memory)
-    USERS_DB.setUsers([...USERS_DB.users, newUser])
-
-    // Add new User data into the file(DB)
-    await fsPromises.writeFile(
-      path.join(__dirname, '..', 'model', 'users.json'),
-      JSON.stringify(USERS_DB.users)
-    )
+    const result = await User.create(newUser);
 
     if(__DEBUG__) {
-      console.log(`[${baseFileName} > All registered users]: `, USERS_DB.users);
+      console.log(`[${baseFileName} > register a user result]: `, newUser, result);
     }
 
     res.status(201).json({'success': `New user ${user} created`})
