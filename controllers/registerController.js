@@ -15,6 +15,7 @@ if (__DEBUG__) {
 // MARK: - REST Handlers
 const handleNewUser = async(req, res) => {
   const { user, pwd } = req.body;
+  // 400: Bad Request
   if(!user || !pwd) return res.status(400).json({
     "message": `Username and password are required.`
   })
@@ -53,9 +54,11 @@ const handleNewUser = async(req, res) => {
       console.log(`[${baseFileName} > All registered users]: `, USERS_DB.users);
     }
 
+    // 201: Created
     res.status(201).json({'success': `New user ${user} created`})
 
   } catch (error) {
+    // 500: Internal Server Error
     res.status(500).json({"message": error.message})
   }
 }

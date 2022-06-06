@@ -59,7 +59,7 @@ app.use('/employees', require('./routes/api/employees'))   // rest api json-data
 
 // MARK: - 404 page
 app.all("*", (req, res) => {
-  res.status(404);
+  res.status(404); // Not Found
   if (req.accepts("html")) {
     res.sendFile(path.join(__dirname, "views", "404.html"));
   } else if (req.accepts("json")) {

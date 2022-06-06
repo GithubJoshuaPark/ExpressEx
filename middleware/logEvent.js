@@ -64,6 +64,8 @@ const errorHandler = (err, req, res, next) => {
   if(__DEBUG__) {
     console.error(err.status)
   }
+
+  // 500: Internal Server Error
   res.status(500).send(err.message)
 }
 

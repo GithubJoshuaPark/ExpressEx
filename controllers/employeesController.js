@@ -25,6 +25,7 @@ const postEmployee = (req, res) => {
     lastname: req.body.lastname
   }
   if(!newEmployee.firstname || !newEmployee.lastname) {
+    // 400 Bad Request
     return res.status(400).json({
       'message': 'First and last names are required.'
     })
@@ -42,6 +43,7 @@ const putEmployee = (req, res) => {
   }
 
   if(!employee) {
+    // 400 Bad Request
     return res.status(400).json({"message": `Employee of ID (${req.body.id}) not found`});
   }
   if(req.body?.firstname) employee.firstname = req.body.firstname;
@@ -58,6 +60,7 @@ const delEmployee = (req, res) => {
   // del
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.body.id));
   if(!employee) {
+    // 400 Bad Request
     return res.status(400).json({"message": `Employee ID ${req.body.id} not found`});
   }
   const filteredArray = EMPLOYEES_DB.employees.filter(emp => emp.id !== parseInt(req.body.id));
@@ -69,6 +72,7 @@ const getEmployee = (req, res) => {
   // get the specified id employee data
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.params.id));
   if(!employee) {
+    // 400 Bad Request
     return res.status(400).json({"message": `Employee of ID (${req.params.id}) not found`});
   }
   res.json(employee);

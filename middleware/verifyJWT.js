@@ -1,31 +1,29 @@
 const jwt = require("jsonwebtoken");
 const { __DEBUG__ } = require("../const/constrefs");
-// require("dotenv").config(); // --> moved into server.js
-
-const baseFileName = __filename.split("/")[__filename.split("/").length - 1];
+const baseFileName  = __filename.split("/")[__filename.split("/").length - 1];
 
 const verifyJWT = (req, res, next) => {
-  const authHeader = req.headers.authorization || req.headers.Authorization;  // "Bearer fdafda...."
+  const accessToken = req.headers.authorization || req.headers.Authorization;  // "Bearer fdafda...."
  
   if (__DEBUG__) {  
-    console.log(`[${baseFileName} > req.headers.authorization]: `, authHeader);
+    console.log(`[${baseFileName} > req.headers.authorization]: `, accessToken);
   }
 
-  if (!authHeader?.startsWith('Bearer ')) {
-    return res.sendStatus(401);
+  if (!accessToken?.startsWith('Bearer ')) {
+    return res.sendStatus(401); // 	Unauthorized
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = accessToken.split(" ")[1];
 
   // jwt verify
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res.sendStatus(403); // Invalid Token
+      return res.sendStatus(403); // 	Forbidden (Invalid Token)
     }
 
     // ref decoded of the payload data
     if(__DEBUG__) {
-      console.log(`[${baseFileName} > jwt token decoded]: `, decoded);
+      console.log(`[${baseFileName} > jwt token decoded payload]: `, decoded);
     }
     req.user = decoded.UserInfo.username;
     req.roles = decoded.UserInfo.roles;

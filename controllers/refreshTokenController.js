@@ -3,9 +3,7 @@
  */
 
 const { __DEBUG__, USERS_DB } = require("../const/constrefs");
-const jwt           = require("jsonwebtoken");
-// require("dotenv").config(); --> moved into server.js
-
+const jwt = require("jsonwebtoken");
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
 /**
@@ -23,6 +21,7 @@ const handleRefreshToken = (req, res) => {
 
   if (!cookies?.jwt) {
     return res.status(401).json({
+      // 401: Unauthorized
       message: `There are no JWT you have gotten before.`,
     });
   }

@@ -21,6 +21,7 @@ const handleLogin = async (req, res) => {
   }
 
   if (!user || !pwd) {
+    // 400 Bad Request
     return res.status(400).json({
       message: `Username and password are required.`,
     });
@@ -82,7 +83,7 @@ const handleLogin = async (req, res) => {
     res.json({ accessToken });  
 
   } else {
-    //res.sendStatus(401);
+    //res.sendStatus(401); // 	Forbidden
     return res
       .status(401)
       .json({ message: `User ID ${req.body.user} not found` });

@@ -23,6 +23,7 @@ const handleRefreshToken = async (req, res) => {
 
   if (!cookies?.jwt) {
     return res.status(401).json({
+      // 401: Unauthorized
       message: `There are no JWT you have gotten before.`,
     });
   }
