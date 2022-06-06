@@ -42,7 +42,7 @@ const handleLogout = async (req, res) => {
                       sameSite: 'None',
                       secure: true
                     });
-    return res.sendStatus(204)
+    return res.sendStatus(204) // Not Content
   }
 
   // Delete the refreshToken in DB
@@ -57,7 +57,7 @@ const handleLogout = async (req, res) => {
                     sameSite: 'None',
                     secure: true
                   }); // secure: true - only serves on https
-  res.sendStatus(204);
+  res.sendStatus(204); // Not Content
 
 };
 
