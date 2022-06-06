@@ -3,7 +3,7 @@ const path          = require("path");
 const bcrypt        = require("bcrypt");
 const { __DEBUG__, USERS_DB } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
-require("dotenv").config();
+// require("dotenv").config(); --> moved into server.js
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
 /**

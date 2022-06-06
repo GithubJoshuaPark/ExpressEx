@@ -1,15 +1,26 @@
+require("dotenv").config();
 const express = require("express");
-const app = express();
+const app     = express();
 
 const path = require("path");
 const cors = require("cors");
+
 const { logger, errorHandler } = require("./middleware/logEvent");
 const corsOptions  = require('./config/corsOptions');
 const verifyJWT    = require('./middleware/verifyJWT');
 const credentials  = require('./middleware/credentials');
 const cookieParser = require('cookie-parser');
 
+const mongoose     = require('mongoose'); // 🍎
+const connectDB    = require('./config/mongoDbConn');
+const { __DEBUG__ } = require("./const/constrefs");
+
 const PORT = process.env.PORT || 3500;
+
+const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
+
+// Connect to MongoDB
+connectDB();
 
 // MARK: 🍎 Custom Middleware logger
 app.use(logger);
@@ -60,4 +71,12 @@ app.all("*", (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connection.once('open', () => {
+  // [ref mongoose connection event](https://mongoosejs.com/docs/connections.html#connection-events)
+  if(__DEBUG__) {
+    console.log(`[${baseFileName}]: Connected to MongoDB`);
+  }
+  app.listen(PORT, () => console.log(`[${baseFileName}]: Server running on port ${PORT}`));
+});
+
+

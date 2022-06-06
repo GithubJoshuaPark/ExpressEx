@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { __DEBUG__ } = require("../const/constrefs");
-require("dotenv").config();
+// require("dotenv").config(); // --> moved into server.js
 
 const baseFileName = __filename.split("/")[__filename.split("/").length - 1];
 

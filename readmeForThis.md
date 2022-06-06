@@ -61,3 +61,13 @@ app.use('/',express.static(path.join(__dirname, '/public')))
   $node
   > require('crypto').randomBytes(64).toString('hex')
 ```
+---
+> Using Cloud MongoDB
+> 1. Make account in cloud.mongodb.com
+> 2. Make cluster(cluster0), db(companyDB), collection(employee)
+> 3. Make some users (soro123/soro123)
+> 4. copy connection string and paste it into .env file
+```
+  $npm i mongoose
+```
+[ref mongoosejs.com]()
