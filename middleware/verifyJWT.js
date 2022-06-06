@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { __DEBUG__ } = require("../const/constrefs");
+const { __DEBUG__, HTTP_STATUS_CODES } = require("../const/constrefs");
 const baseFileName  = __filename.split("/")[__filename.split("/").length - 1];
 
 const verifyJWT = (req, res, next) => {
@@ -10,7 +10,7 @@ const verifyJWT = (req, res, next) => {
   }
 
   if (!accessToken?.startsWith('Bearer ')) {
-    return res.sendStatus(401); // 	Unauthorized
+    return res.sendStatus(HTTP_STATUS_CODES.Unauthorized_401);
   }
 
   const token = accessToken.split(" ")[1];
@@ -18,7 +18,7 @@ const verifyJWT = (req, res, next) => {
   // jwt verify
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res.sendStatus(403); // 	Forbidden (Invalid Token)
+      return res.sendStatus(HTTP_STATUS_CODES.Forbidden_403);
     }
 
     // ref decoded of the payload data
@@ -29,8 +29,6 @@ const verifyJWT = (req, res, next) => {
     req.roles = decoded.UserInfo.roles;
     next();
   });
-
 };
-
 
 module.exports = verifyJWT;

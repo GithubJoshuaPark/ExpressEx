@@ -2,7 +2,7 @@
  * Using json file as db
  */
 
-const { __DEBUG__, USERS_DB } = require("../const/constrefs");
+const { __DEBUG__, USERS_DB, HTTP_STATUS_CODES } = require("../const/constrefs");
 const fsPromises    = require("fs").promises;
 const path          = require("path");
 
@@ -24,10 +24,7 @@ const handleLogout = async (req, res) => {
   }
 
   if (!cookies?.jwt) {
-    return res.sendStatus(204) // No content
-    // return res.status(204).json({
-    //   message: `There are no JWT you have gotten before.`,
-    // });
+    return res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
   }
 
   const refreshToken = cookies.jwt;
@@ -35,14 +32,13 @@ const handleLogout = async (req, res) => {
   // Check user data in DB
   const foundedUser = USERS_DB.users.find((person) => person.refreshToken === refreshToken);
   if (!foundedUser) {
-    //return res.sendStatus(403) // Forbidden
     res.clearCookie('jwt', 
                     { 
                       httpOnly: true,
                       sameSite: 'None',
                       secure: true
                     });
-    return res.sendStatus(204) // Not Content
+    return res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
   }
 
   // Delete the refreshToken in DB
@@ -57,7 +53,7 @@ const handleLogout = async (req, res) => {
                     sameSite: 'None',
                     secure: true
                   }); // secure: true - only serves on https
-  res.sendStatus(204); // Not Content
+  res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
 
 };
 

@@ -2,7 +2,7 @@
  * Using json file as db
  */
 
-const { __DEBUG__, EMPLOYEES_DB } = require("../const/constrefs");
+const { __DEBUG__, EMPLOYEES_DB, HTTP_STATUS_CODES } = require("../const/constrefs");
 const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
 
 if (__DEBUG__) { 
@@ -25,13 +25,12 @@ const postEmployee = (req, res) => {
     lastname: req.body.lastname
   }
   if(!newEmployee.firstname || !newEmployee.lastname) {
-    // 400 Bad Request
-    return res.status(400).json({
+    return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({
       'message': 'First and last names are required.'
     })
   }
   EMPLOYEES_DB.setEmployees([...EMPLOYEES_DB.employees, newEmployee]);
-  res.status(201).json(EMPLOYEES_DB.employees);
+  res.status(HTTP_STATUS_CODES.Created_201).json(EMPLOYEES_DB.employees);
 };
 
 const putEmployee = (req, res) => {
@@ -43,8 +42,7 @@ const putEmployee = (req, res) => {
   }
 
   if(!employee) {
-    // 400 Bad Request
-    return res.status(400).json({"message": `Employee of ID (${req.body.id}) not found`});
+    return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({"message": `Employee of ID (${req.body.id}) not found`});
   }
   if(req.body?.firstname) employee.firstname = req.body.firstname;
   if(req.body?.lastname) employee.lastname = req.body.lastname;
@@ -60,8 +58,7 @@ const delEmployee = (req, res) => {
   // del
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.body.id));
   if(!employee) {
-    // 400 Bad Request
-    return res.status(400).json({"message": `Employee ID ${req.body.id} not found`});
+    return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({"message": `Employee ID ${req.body.id} not found`});
   }
   const filteredArray = EMPLOYEES_DB.employees.filter(emp => emp.id !== parseInt(req.body.id));
   EMPLOYEES_DB.setEmployees([...filteredArray]);
@@ -72,8 +69,7 @@ const getEmployee = (req, res) => {
   // get the specified id employee data
   const employee = EMPLOYEES_DB.employees.find(emp => emp.id === parseInt(req.params.id));
   if(!employee) {
-    // 400 Bad Request
-    return res.status(400).json({"message": `Employee of ID (${req.params.id}) not found`});
+    return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({"message": `Employee of ID (${req.params.id}) not found`});
   }
   res.json(employee);
 };

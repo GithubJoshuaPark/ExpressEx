@@ -5,7 +5,7 @@
 const fsPromises    = require("fs").promises;
 const path          = require("path");
 const bcrypt        = require("bcrypt");
-const { __DEBUG__, USERS_DB } = require("../const/constrefs");
+const { __DEBUG__, USERS_DB, HTTP_STATUS_CODES } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
 // require("dotenv").config(); --> moved into server.js
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
@@ -24,17 +24,15 @@ const handleLogin = async (req, res) => {
   }
 
   if (!user || !pwd) {
-    // 400: Bad Request
-    return res.status(400).json({
+    return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({
       message: `Username and password are required.`,
     });
   }
 
   const foundedUser = USERS_DB.users.find((person) => person.username === user);
   if (!foundedUser) {
-    //return res.sendStatus(401) // Unauthorized
     return res
-      .status(401)
+      .status(HTTP_STATUS_CODES.Unauthorized_401)
       .json({ message: `User ID ${req.body.user} not found` });
   }
 
@@ -91,9 +89,8 @@ const handleLogin = async (req, res) => {
     res.json({ accessToken });  
 
   } else {
-    //res.sendStatus(401); // 	Forbidden
     return res
-      .status(401)
+      .status(HTTP_STATUS_CODES.Unauthorized_401)
       .json({ message: `User ID ${req.body.user} not found` });
   }
 };

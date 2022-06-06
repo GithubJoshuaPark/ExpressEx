@@ -5,7 +5,7 @@
 const fsPromises = require('fs').promises
 const path       = require('path')
 const bcrypt     = require('bcrypt')
-const { __DEBUG__, USERS_DB } = require('../const/constrefs')
+const { __DEBUG__, USERS_DB, HTTP_STATUS_CODES } = require('../const/constrefs')
 const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
 
 if (__DEBUG__) {
@@ -15,8 +15,7 @@ if (__DEBUG__) {
 // MARK: - REST Handlers
 const handleNewUser = async(req, res) => {
   const { user, pwd } = req.body;
-  // 400: Bad Request
-  if(!user || !pwd) return res.status(400).json({
+  if(!user || !pwd) return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({
     "message": `Username and password are required.`
   })
 
@@ -24,8 +23,7 @@ const handleNewUser = async(req, res) => {
   const idDuplicate = USERS_DB.users.find(person => person.username === user)
   
   if(idDuplicate) {
-    //return res.sendStatus(409) // Conflict
-    return res.status(409).json({
+    return res.status(HTTP_STATUS_CODES.Conflict_409).json({
       "message": `Already the ID exists`
     })
   } 
@@ -54,12 +52,10 @@ const handleNewUser = async(req, res) => {
       console.log(`[${baseFileName} > All registered users]: `, USERS_DB.users);
     }
 
-    // 201: Created
-    res.status(201).json({'success': `New user ${user} created`})
+    res.status(HTTP_STATUS_CODES.Created_201).json({'success': `New user ${user} created`})
 
   } catch (error) {
-    // 500: Internal Server Error
-    res.status(500).json({"message": error.message})
+    res.status(HTTP_STATUS_CODES.Internal_Server_Err_500).json({"message": error.message})
   }
 }
 

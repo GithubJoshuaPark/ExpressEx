@@ -31,3 +31,5 @@
 2022-06-06 18:52:34	5e5ad2ee-a7dd-4e23-aace-3fe40240191a	[LogEvent]: GET	undefined	/images/fimge001.jpg
 2022-06-06 18:52:34	f29829ca-45fd-4c41-a0e1-bbdc74e11869	[LogEvent]: POST	http://localhost:3500	/auth
 2022-06-06 18:52:34	f15546b1-14ab-44b8-b477-c021bde20a31	[LogEvent]: GET	undefined	/images/favicon.ico
+2022-06-06 21:13:23	e635d9f3-2a9c-4ebc-9bb8-0eadbaa8bd23	[LogEvent]: POST	undefined	/auth
+2022-06-06 21:14:34	d22a8705-5626-4bd8-b1e2-4739005a768d	[LogEvent]: POST	undefined	/auth

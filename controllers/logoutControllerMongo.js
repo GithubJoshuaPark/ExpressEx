@@ -3,7 +3,7 @@
  */
 
 const User          = require('../model/UserForMongoSchema');
-const { __DEBUG__ } = require("../const/constrefs");
+const { __DEBUG__, HTTP_STATUS_CODES } = require("../const/constrefs");
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
 
 /**
@@ -22,10 +22,7 @@ const handleLogout = async (req, res) => {
   }
 
   if (!cookies?.jwt) {
-    return res.sendStatus(204) // No content
-    // return res.status(204).json({
-    //   message: `There are no JWT you have gotten before.`,
-    // });
+    return res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
   }
 
   const refreshToken = cookies.jwt;
@@ -33,14 +30,13 @@ const handleLogout = async (req, res) => {
   // Check user data in DB
   const foundedUser  = await User.findOne({ refreshToken }).exec(); // 🍎
   if (!foundedUser) {
-    //return res.sendStatus(403) // Forbidden
     res.clearCookie('jwt', 
                     { 
                       httpOnly: true,
                       sameSite: 'None',
                       secure: true
                     });
-    return res.sendStatus(204) // Not Content
+    return res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
   }
 
   // Delete the refreshToken of the current User's in Mongo DB
@@ -56,7 +52,7 @@ const handleLogout = async (req, res) => {
                     sameSite: 'None',
                     secure: true // secure: true - only serves on https
                   });
-  res.sendStatus(204); // No Content
+  res.sendStatus(HTTP_STATUS_CODES.No_Content_204);
 
 };
 

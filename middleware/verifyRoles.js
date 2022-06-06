@@ -1,10 +1,10 @@
-const { __DEBUG__ } = require("../const/constrefs");
+const { __DEBUG__, HTTP_STATUS_CODES } = require("../const/constrefs");
 const baseFileName = __filename.split("/")[__filename.split("/").length - 1];
 
 const verifyRoles = (...allowedRoles) => {
   return (req, res, next) => {
 
-    if(!req?.roles) return res.sendStatus(401); // UnAuthorized
+    if(!req?.roles) return res.sendStatus(HTTP_STATUS_CODES.Unauthorized_401);
 
     const rolesArray = [...allowedRoles];
     const result = req.roles.map(role => rolesArray.includes(role)).find(val => val === true);
@@ -15,7 +15,7 @@ const verifyRoles = (...allowedRoles) => {
       console.log(`[${baseFileName} > result]: `                   , result    );
     }
 
-    if(!result) return res.sendStatus(401); // UnAuthorized
+    if(!result) return res.sendStatus(HTTP_STATUS_CODES.Unauthorized_401);
 
     next();
 

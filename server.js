@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 
 const mongoose      = require('mongoose'); // 🍎
 const connectDB     = require('./config/mongoDbConn');
-const { __DEBUG__ } = require("./const/constrefs");
+const { __DEBUG__, HTTP_STATUS_CODES } = require("./const/constrefs");
 
 const PORT = process.env.PORT || 3500;
 
@@ -59,7 +59,7 @@ app.use('/employees', require('./routes/api/employees'))   // rest api json-data
 
 // MARK: - 404 page
 app.all("*", (req, res) => {
-  res.status(404); // Not Found
+  res.status(HTTP_STATUS_CODES.Not_Found_404);
   if (req.accepts("html")) {
     res.sendFile(path.join(__dirname, "views", "404.html"));
   } else if (req.accepts("json")) {

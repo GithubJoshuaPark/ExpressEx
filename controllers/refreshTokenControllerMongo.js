@@ -3,7 +3,7 @@
  */
 
 const User          = require('../model/UserForMongoSchema');
-const { __DEBUG__ } = require("../const/constrefs");
+const { __DEBUG__, HTTP_STATUS_CODES } = require("../const/constrefs");
 const jwt           = require("jsonwebtoken");
 
 const baseFileName = __filename.split("/")[ __filename.split("/").length - 1];
@@ -22,8 +22,7 @@ const handleRefreshToken = async (req, res) => {
   }
 
   if (!cookies?.jwt) {
-    return res.status(401).json({
-      // 401: Unauthorized
+    return res.status(HTTP_STATUS_CODES.Unauthorized_401).json({
       message: `There are no JWT you have gotten before.`,
     });
   }
@@ -32,9 +31,8 @@ const handleRefreshToken = async (req, res) => {
   const foundedUser  = await User.findOne({ refreshToken: refreshToken }).exec(); // 🍎
 
   if (!foundedUser) {
-    //return res.sendStatus(403) // Forbidden
     return res
-      .status(403)
+      .status(HTTP_STATUS_CODES.Forbidden_403)
       .json({ message: `User not found by the refreshToken: ${refreshToken}` });
   }
 
@@ -42,7 +40,7 @@ const handleRefreshToken = async (req, res) => {
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if(err || foundedUser.username !== decoded.username) {
       return res
-      .status(403)
+      .status(HTTP_STATUS_CODES.Forbidden_403)
       .json({ message: `Delivered RefreshToken: ${refreshToken} is not valid` });
     }
 

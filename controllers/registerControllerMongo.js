@@ -4,14 +4,13 @@
 const User   = require('../model/UserForMongoSchema');
 const bcrypt = require('bcrypt');
 
-const { __DEBUG__ } = require('../const/constrefs');
+const { __DEBUG__, HTTP_STATUS_CODES } = require('../const/constrefs');
 const baseFileName = __filename.split('/')[__filename.split('/').length - 1]
 
 // MARK: - REST Handlers
 const handleNewUser = async(req, res) => {
   const { user, pwd } = req.body;
-  // 400: Bad Request
-  if(!user || !pwd) return res.status(400).json({
+  if(!user || !pwd) return res.status(HTTP_STATUS_CODES.Bad_Request_400).json({
     "message": `Username and password are required.`
   })
 
@@ -19,8 +18,7 @@ const handleNewUser = async(req, res) => {
   const idDuplicate = await User.findOne({ username: user}).exec(); // 🍎
   
   if(idDuplicate) {
-    //return res.sendStatus(409) // Conflict
-    return res.status(409).json({
+    return res.status(HTTP_STATUS_CODES.Conflict_409).json({
       "message": `Already the user exists`
     })
   } 
@@ -43,12 +41,10 @@ const handleNewUser = async(req, res) => {
       console.log(`[${baseFileName} > register a user result]: `, newUser, result);
     }
 
-    // 201: Created
-    res.status(201).json({'success': `New user ${user} created`})
+    res.status(HTTP_STATUS_CODES.Created_201).json({'success': `New user ${user} created`})
 
   } catch (error) {
-    // 500: Internal Server Error
-    res.status(500).json({"message": error.message})
+    res.status(HTTP_STATUS_CODES.Internal_Server_Err_500).json({"message": error.message})
   }
 }
 

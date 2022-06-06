@@ -4,7 +4,7 @@ const { v4: uuid } = require('uuid')
 const fs         = require('fs')
 const fsPromises = require('fs').promises
 const path       = require('path')
-const __DEBUG__  = require('../const/constrefs')
+const { __DEBUG__, HTTP_STATUS_CODES }  = require('../const/constrefs')
 const baseFileName = __filename.split("/")[__filename.split("/").length - 1];
 
 /**
@@ -22,14 +22,12 @@ const logEvents = async(message, logFileName) => {
   }  
 
   try {
-
     if(!fs.existsSync(path.join(__dirname, '..', 'logs'))) {
       fs.mkdir(path.join(__dirname, '..', 'logs'), (err) => {
         if(err) throw err
         console.log(`[Directory created]: `)
       })
     }
-
     await fsPromises.appendFile(path.join(__dirname, '..', 'logs', logFileName), logItem)
   } catch (err) {
     console.error(err)
@@ -43,12 +41,10 @@ const logEvents = async(message, logFileName) => {
  * @param {*} next 
  */
 const logger = (req, res, next) => {
-  logEvents(`[LogEvent]: ${req.method}\t${req.headers.origin}\t${req.url}`, 'reqLog.txt')
-
+  logEvents(`[${baseFileName}]: ${req.method}\t${req.headers.origin}\t${req.url}`, 'reqLog.txt')
   if(__DEBUG__) {
     console.log(`[${baseFileName}] > ${req.method}\t${req.path}`);
-  }
-  
+  }  
   next()
 }
 
@@ -64,9 +60,7 @@ const errorHandler = (err, req, res, next) => {
   if(__DEBUG__) {
     console.error(err.status)
   }
-
-  // 500: Internal Server Error
-  res.status(500).send(err.message)
+  res.status(HTTP_STATUS_CODES.Internal_Server_Err_500).send(err.message)
 }
 
 module.exports = { logger, logEvents, errorHandler }
