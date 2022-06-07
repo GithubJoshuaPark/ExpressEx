@@ -33,3 +33,7 @@
 2022-06-06 18:52:34	f15546b1-14ab-44b8-b477-c021bde20a31	[LogEvent]: GET	undefined	/images/favicon.ico
 2022-06-06 21:13:23	e635d9f3-2a9c-4ebc-9bb8-0eadbaa8bd23	[LogEvent]: POST	undefined	/auth
 2022-06-06 21:14:34	d22a8705-5626-4bd8-b1e2-4739005a768d	[LogEvent]: POST	undefined	/auth
+2022-06-06 22:00:15	bf054af7-0df3-49a1-b6f8-236cba3a2f70	[logEvent.js]: POST	undefined	/auth
+2022-06-06 22:00:46	5044c3ec-c326-4a26-a5d4-99fb80592d4f	[logEvent.js]: GET	undefined	/employees/
+2022-06-06 22:04:08	b3c60ab7-5c1b-49de-baee-57d3ef08dcdd	[logEvent.js]: POST	undefined	/auth
+2022-06-06 22:04:20	3d28c452-11ab-4e34-8da2-b3225e118d47	[logEvent.js]: GET	undefined	/employees/
